@@ -1,0 +1,115 @@
+scalar DateTime
+enum Role {
+  ADMIN
+  USER
+}
+
+type User {
+  id: Int!
+  firstName: String!
+  lastName:String!
+  email: String!
+  password: String!
+  role: Role!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Investor {
+  id: Int!
+  name: String!
+  company: String!
+  timezone: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  availability: [AvailabilitySlot!]!
+  selections: [Selection!]!
+}
+
+type PortfolioCompany {
+  id: Int!
+  name: String!
+  company: String!
+  timezone: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  availability: [AvailabilitySlot!]!
+  selections: [Selection!]!
+}
+
+type Selection {
+  id: Int!
+  investorId: Int
+  portfolioId: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  investor: Investor
+  portfolio: PortfolioCompany
+  meetings: [Meeting!]!
+}
+
+type Meeting {
+  id: Int!
+  selectionId: Int!
+  duration: Int!
+  date: DateTime!
+  startTime: DateTime!
+  endTime: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  selection: Selection!
+  events: [Event!]!
+}
+
+type AvailabilitySlot {
+  id: Int!
+  investorId: Int
+  portfolioId: Int
+  timezone: String!
+  date: DateTime
+  startTime: DateTime
+  endTime: DateTime
+  investor: Investor
+  portfolio: PortfolioCompany
+}
+
+type Event {
+  id: Int!
+  name: String!
+  startDate: DateTime!
+  endDate: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  meetings: [Meeting!]!
+}
+
+type LoginResponse {
+  message: String!
+  token: String
+}
+
+type TotalCounts {
+  title: String!
+  value: String!
+  interval: String!
+  trend: String!
+}
+
+type Query {
+  users: [User!]!
+  user(id: Int!): User
+  getTotalCounts: [TotalCounts!]!
+  getAvailability: [AvailabilitySlot!]!
+  getMeetingSchedule: [Meeting!]!
+  getInvestors:[Investor!]!
+  getPortfolioCompanys:[PortfolioCompany!]!
+  getSelections:[Selection!]!
+}
+
+type Mutation {
+  createUser(firstName: String!, lastName: String!, email: String!, password: String!, role: Role): User!
+  updateUser(id: Int!, firstName: String!, lastName: String!, email: String, password: String, role: Role): User!
+  deleteUser(id: Int!): User!
+  login(username: String!, password: String!): LoginResponse!
+  autoScheduleMeetings():Meeting!
+}

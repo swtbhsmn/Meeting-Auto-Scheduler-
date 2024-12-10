@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  webapp:
+    build:
+      context: .
+    container_name: meeting-auto-scheduler
+    image: meeting-auto-scheduler-image:latest
+    ports: 
+      - '3005:3005'
+    volumes: 
+      - .:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    tty: true
